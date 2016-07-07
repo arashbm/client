@@ -483,14 +483,19 @@ func (e *Env) GetUsername() NormalizedUsername {
 }
 
 func (e *Env) GetSocketFile() (ret string, err error) {
+	// ret = e.GetString(
+	// 	func() string { return e.cmd.GetSocketFile() },
+	// 	func() string { return os.Getenv("KEYBASE_SOCKET_FILE") },
+	// 	func() string { return e.config.GetSocketFile() },
+	// )
+	// if len(ret) == 0 {
+	// 	ret = filepath.Join(e.GetRuntimeDir(), SocketFile)
+	// }
 	ret = e.GetString(
-		func() string { return e.cmd.GetSocketFile() },
-		func() string { return os.Getenv("KEYBASE_SOCKET_FILE") },
-		func() string { return e.config.GetSocketFile() },
+		func() string {
+			return filepath.Join("/Users/gabe/Library/Group Containers/keybase/Library/Caches/Keybase", SocketFile)
+		},
 	)
-	if len(ret) == 0 {
-		ret = filepath.Join(e.GetRuntimeDir(), SocketFile)
-	}
 	return
 }
 

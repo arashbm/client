@@ -21,17 +21,23 @@
 @property NSImage *image;
 @property KBRunMode runMode;
 @property BOOL installDisabled;
+@property BOOL useGroupContainer;
 @end
 
 @implementation KBEnvConfig
 
 + (instancetype)envConfigWithRunMode:(KBRunMode)runMode {
-  return [[self.class alloc] initWithRunMode:runMode];
+  return [[self.class alloc] initWithRunMode:runMode useGroupContainer:false];
 }
 
-- (instancetype)initWithRunMode:(KBRunMode)runMode {
++ (instancetype)envConfigWithRunMode:(KBRunMode)runMode useGroupContainer:(BOOL)useGroupContainer {
+  return [[self.class alloc] initWithRunMode:runMode useGroupContainer:useGroupContainer];
+}
+
+- (instancetype)initWithRunMode:(KBRunMode)runMode useGroupContainer:(BOOL)useGroupContainer {
   if ((self = [super init])) {
     _runMode = runMode;
+    _useGroupContainer = useGroupContainer;
     switch (_runMode) {
       case KBRunModeProd: {
         self.title = @"Keybase.io";
@@ -63,7 +69,8 @@
 }
 
 + (NSString *)groupContainer:(NSString *)path {
-  NSString *dir = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:KBAppGroupId].path;
+  NSString *dir = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:KBAppGroupName].path;
+  if (!path) return dir;
   return [KBPath pathInDir:dir path:path options:0];
 }
 
@@ -132,8 +139,13 @@
 }
 
 - (NSString *)homeDir {
-  NSString *homeDir = _homeDir ? _homeDir : @"~";
-  return [KBPath path:homeDir options:0];
+  if (_homeDir) {
+    return _homeDir;
+  }
+  if (_useGroupContainer) {
+    return [KBEnvConfig groupContainer:nil];
+  }
+  return [KBPath path:@"~" options:0];
 }
 
 - (NSString *)sockFile {
