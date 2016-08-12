@@ -84,6 +84,14 @@ func (rc *TwitterChecker) findSigInTweet(g GlobalContextLite, h SigHint, s *goqu
 }
 
 func (rc *TwitterChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_TWITTER, rc.proof, h)
+	}
+	return rc.CheckStatusOld(g, h)
+}
+
+func (rc *TwitterChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
+	// fmt.Println("\ncheck text\n%s\n", h.checkText)
 	res, err := g.GetExternalAPI().GetHTML(NewAPIArg(h.apiURL))
 	if err != nil {
 		return XapiError(err, h.apiURL)

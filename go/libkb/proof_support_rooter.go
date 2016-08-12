@@ -127,7 +127,13 @@ func (rc *RooterChecker) rewriteURL(g GlobalContextLite, s string) (string, erro
 }
 
 func (rc *RooterChecker) CheckStatus(g GlobalContextLite, h SigHint) (perr ProofError) {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_ROOTER, rc.proof, h)
+	}
+	return rc.CheckStatusOld(g, h)
+}
 
+func (rc *RooterChecker) CheckStatusOld(g GlobalContextLite, h SigHint) (perr ProofError) {
 	g.GetLog().Debug("+ Checking rooter at API=%s", h.apiURL)
 	defer func() {
 		g.GetLog().Debug("- Rooter -> %v", perr)

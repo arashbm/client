@@ -64,7 +64,13 @@ func (rc *DNSChecker) CheckDomain(g GlobalContextLite, sig string, domain string
 }
 
 func (rc *DNSChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_DNS, rc.proof, h)
+	}
+	return rc.CheckStatusOld(g, h)
+}
 
+func (rc *DNSChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
 	wanted := h.checkText
 	g.GetLog().Debug("| DNS proof, want TXT value: %s", wanted)
 

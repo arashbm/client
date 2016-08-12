@@ -58,6 +58,13 @@ func (h *HackerNewsChecker) CheckHint(g GlobalContextLite, hint SigHint) ProofEr
 }
 
 func (h *HackerNewsChecker) CheckStatus(g GlobalContextLite, hint SigHint) ProofError {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_HACKERNEWS, h.proof, hint)
+	}
+	return h.CheckStatusOld(g, hint)
+}
+
+func (h *HackerNewsChecker) CheckStatusOld(g GlobalContextLite, hint SigHint) ProofError {
 	res, err := g.GetExternalAPI().GetText(NewAPIArg(hint.apiURL))
 
 	if err != nil {

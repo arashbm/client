@@ -41,6 +41,13 @@ func (rc *CoinbaseChecker) CheckHint(g GlobalContextLite, h SigHint) ProofError 
 func (rc *CoinbaseChecker) GetTorError() ProofError { return nil }
 
 func (rc *CoinbaseChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_COINBASE, rc.proof, h)
+	}
+	return rc.CheckStatusOld(g, h)
+}
+
+func (rc *CoinbaseChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
 	res, err := g.GetExternalAPI().GetHTML(NewAPIArg(h.apiURL))
 	if err != nil {
 		return XapiError(err, h.apiURL)

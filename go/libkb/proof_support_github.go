@@ -40,6 +40,14 @@ func (rc *GithubChecker) CheckHint(g GlobalContextLite, h SigHint) ProofError {
 }
 
 func (rc *GithubChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError {
+	if UsePvl {
+		return CheckProof(g, &hardcodedPVL, keybase1.ProofType_GITHUB, rc.proof, h)
+	}
+	return rc.CheckStatusOld(g, h)
+}
+
+func (rc *GithubChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
+	g.GetLog().Warning("Github Hint: %s", h)
 	res, err := g.GetExternalAPI().GetText(NewAPIArg(h.apiURL))
 
 	if err != nil {
