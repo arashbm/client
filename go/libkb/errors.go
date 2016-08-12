@@ -45,6 +45,9 @@ type ProofErrorImpl struct {
 }
 
 func NewProofError(s keybase1.ProofStatus, d string, a ...interface{}) *ProofErrorImpl {
+	if len(a) == 0 {
+		return &ProofErrorImpl{s, d}
+	}
 	return &ProofErrorImpl{s, fmt.Sprintf(d, a...)}
 }
 
