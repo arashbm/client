@@ -91,7 +91,6 @@ func (rc *TwitterChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError
 }
 
 func (rc *TwitterChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
-	// fmt.Println("\ncheck text\n%s\n", h.checkText)
 	res, err := g.GetExternalAPI().GetHTML(NewAPIArg(h.apiURL))
 	if err != nil {
 		return XapiError(err, h.apiURL)

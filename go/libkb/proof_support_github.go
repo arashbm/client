@@ -47,7 +47,6 @@ func (rc *GithubChecker) CheckStatus(g GlobalContextLite, h SigHint) ProofError 
 }
 
 func (rc *GithubChecker) CheckStatusOld(g GlobalContextLite, h SigHint) ProofError {
-	g.GetLog().Warning("Github Hint: %s", h)
 	res, err := g.GetExternalAPI().GetText(NewAPIArg(h.apiURL))
 
 	if err != nil {
