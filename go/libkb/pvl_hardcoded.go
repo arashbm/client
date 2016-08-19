@@ -97,21 +97,3 @@ func init() {
 	}
 	hardcodedPVL = *wrapper
 }
-
-// func init() {
-// 	usr, err := user.Current()
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
-// 	relpath := "go/src/github.com/keybase/client/go/libkb/pvl_hardcoded.json"
-// 	path := fmt.Sprintf("%v/%v", usr.HomeDir, relpath)
-// 	data, err := ioutil.ReadFile(path)
-// 	if err != nil {
-// 		log.Panicf("could not read pvl json file %v: %v", path, err)
-// 	}
-// 	wrapper, err := jsonw.Unmarshal(data)
-// 	if err != nil {
-// 		log.Panicf("could not read pvl json file %v: %v", path, err)
-// 	}
-// 	hardcodedPVL = *wrapper
-// }
