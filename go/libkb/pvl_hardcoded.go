@@ -23,6 +23,11 @@ var hardcodedPVLString = `
       { "assert_find_base64": "sig" }
     ],
     "dns": [{ "assert_regex_match": "/^keybase-site-verification=%{sig_id_medium}$/" }],
+    "generic_web_site": [
+      { "assert_regex_match": "/^https?://%{hostname}/(?:\\.well-known/keybase\\.txt|keybase\\.txt)$/i" },
+      { "fetch": "string" },
+      { "assert_find_base64": "sig" }
+    ],
     "github": [
       { "assert_regex_match": "/^https://gist\\.github(usercontent)?\\.com/%{username_service}/.*$/i" },
       { "fetch": "string" },
@@ -79,11 +84,6 @@ var hardcodedPVLString = `
         "regex_capture": "/^ *(?:@[a-zA-Z0-9_-]+\\s*)* *Verifying myself: I am (?:[A-Za-z0-9_]+) on Keybase\\.io\\. (\\S+) */.*$/i"
       },
       { "assert_regex_match": "/^%{sig_id_short}$/" }
-    ],
-    "web": [
-      { "assert_regex_match": "/^https?://%{hostname}/(?:\\.well-known/keybase\\.txt|keybase\\.txt)$/i" },
-      { "fetch": "string" },
-      { "assert_find_base64": "sig" }
     ]
   }
 }

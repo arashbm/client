@@ -14,53 +14,15 @@ import (
 	jsonw "github.com/keybase/go-jsonw"
 )
 
-func pvlStringToService(service string) (keybase1.ProofType, ProofError) {
-	switch service {
-	case "twitter":
-		return keybase1.ProofType_TWITTER, nil
-	case "github":
-		return keybase1.ProofType_GITHUB, nil
-	case "reddit":
-		return keybase1.ProofType_REDDIT, nil
-	case "coinbase":
-		return keybase1.ProofType_COINBASE, nil
-	case "hackernews":
-		return keybase1.ProofType_HACKERNEWS, nil
-	case "dns":
-		return keybase1.ProofType_DNS, nil
-	case "rooter":
-		return keybase1.ProofType_ROOTER, nil
-	case "web":
-		return keybase1.ProofType_GENERIC_WEB_SITE, nil
-	default:
-		return 0, NewProofError(keybase1.ProofStatus_INVALID_PVL,
-			"Unsupported service %v", service)
-	}
-}
-
 func pvlServiceToString(service keybase1.ProofType) (string, ProofError) {
-	// This is not quite the same as RemoteServiceTypes due to http/https.
-	switch service {
-	case keybase1.ProofType_TWITTER:
-		return "twitter", nil
-	case keybase1.ProofType_GITHUB:
-		return "github", nil
-	case keybase1.ProofType_REDDIT:
-		return "reddit", nil
-	case keybase1.ProofType_COINBASE:
-		return "coinbase", nil
-	case keybase1.ProofType_HACKERNEWS:
-		return "hackernews", nil
-	case keybase1.ProofType_DNS:
-		return "dns", nil
-	case keybase1.ProofType_ROOTER:
-		return "rooter", nil
-	case keybase1.ProofType_GENERIC_WEB_SITE:
-		return "web", nil
-	default:
-		return "", NewProofError(keybase1.ProofStatus_INVALID_PVL,
-			"Unsupported service %v", service)
+	for name, stat := range keybase1.ProofTypeMap {
+		if service == stat {
+			return strings.ToLower(name), nil
+		}
 	}
+
+	return "", NewProofError(keybase1.ProofStatus_INVALID_PVL,
+		"Unsupported service %v", service)
 }
 
 func pvlJSONHasKey(w *jsonw.Wrapper, key string) bool {
