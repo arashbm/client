@@ -665,11 +665,7 @@ func pvlStepSelectorCSS(g libkb.ProofContext, ins *jsonw.Wrapper, state PvlScrip
 			"CSS selector matched too many elements")
 	}
 
-	res, err := pvlSelectionContents(selection, useAttr, attr)
-	if err != nil {
-		return state, libkb.NewProofError(keybase1.ProofStatus_CONTENT_FAILURE,
-			"Could not get html for selection: %v", err)
-	}
+	res := pvlSelectionContents(selection, useAttr, attr)
 
 	state.ActiveString = res
 	return state, nil
