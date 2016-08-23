@@ -740,7 +740,7 @@ func pvlRunCSSSelectorInner(g libkb.ProofContext, html *goquery.Selection, selec
 			selection = selection.Find(selectorString)
 		default:
 			return nil, libkb.NewProofError(keybase1.ProofStatus_INVALID_PVL,
-				"Selector entry string or int %v", selector)
+				"Selector entry must be a string or int %v", selector)
 		}
 	}
 
