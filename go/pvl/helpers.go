@@ -27,7 +27,7 @@ func pvlSubstitute(template string, state PvlScriptState, match []string) (strin
 
 	var outerr libkb.ProofError
 	// Regex to find %{name} occurrences.
-	re := regexp.MustCompile("%{[\\w]+}")
+	re := regexp.MustCompile("%{[\\w]*}")
 	pvlSubstituteOne := func(vartag string) string {
 		// Strip off the %, {, and }
 		varname := vartag[2 : len(vartag)-1]
@@ -139,13 +139,13 @@ func pvlJSONGetChildren(w *jsonw.Wrapper) ([]*jsonw.Wrapper, error) {
 // Simple objects are those that are not arrays or objects.
 // Non-simple objects result in an error.
 func pvlJSONStringSimple(object *jsonw.Wrapper) (string, error) {
-	x, err := object.GetString()
+	x, err := object.GetInt()
 	if err == nil {
-		return x, nil
+		return fmt.Sprintf("%d", x), nil
 	}
-	y, err := object.GetInt()
+	y, err := object.GetString()
 	if err == nil {
-		return string(y), nil
+		return y, nil
 	}
 	z, err := object.GetBool()
 	if err == nil {
